@@ -27,8 +27,13 @@ class CustomDockerSpawner(DockerSpawner):
 c.JupyterHub.spawner_class = CustomDockerSpawner
 
 options_form_tpl = """
-<label for="image">Image</label>
-<input name="image" class="form-control" placeholder="the image to launch (default: {default_image})"></input>
+<label for="image">
+    Image
+</label>
+<input name="image"
+    class="form-control"
+    placeholder="the image to launch (default: {default_image})">
+</input>
 """
 
 def get_options_form(spawner):
@@ -42,3 +47,5 @@ c.DockerSpawner.image = "jupyter/base-notebook"
 # delete containers when they stop
 c.DockerSpawner.remove = True
 
+# c.SingleUserNotebookApp.default_url = "/lab"
+c.Spawner.args = ['--NotebookApp.default_url=/lab']
