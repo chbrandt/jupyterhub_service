@@ -1,6 +1,19 @@
 # jupyterhub_service
 
-JupyterHub spawning 
+JupyterHub spawning
+
+## Install
+
+Let's install JupyterHub with conda:
+
+```bash
+$ conda create -n jupyterhub -c conda-forge -y jupyterhub
+$ conda activate jupyterhub
+$ pip install jupyter-client
+$ pip install oauthenticator
+$ pip install dockerspawner
+```
+
 
 ## References
 
