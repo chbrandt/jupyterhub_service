@@ -7,7 +7,7 @@ JupyterHub spawning
 Let's install JupyterHub with conda:
 
 ```bash
-$ conda create -n jupyterhub -c conda-forge -y jupyterhub
+$ conda create -n jupyterhub -c conda-forge -y jupyterhub[=1.4.1]
 $ conda activate jupyterhub
 $ pip install jupyter-client
 $ pip install oauthenticator
