@@ -1,3 +1,5 @@
+import os
+
 c = get_config()  # noqa
 
 # The docker instances need access to the Hub, so the default loopback port doesn't work:
@@ -5,12 +7,12 @@ from jupyter_client.localinterfaces import public_ips
 c.JupyterHub.hub_ip = public_ips()[0]
 
 # Authenticator
-if os.environ['GITLAB_HOST']:
+if 'GITLAB_HOST' in os.environ:
     from oauthenticator.gitlab import GitLabOAuthenticator
     c.JupyterHub.authenticator_class = GitLabOAuthenticator
-else:
-    from jupyterhub.auth import LocalAuthenticator
-    c.JupyterHub.authenticator_class = LocalAuthenticator
+# else:
+#     from jupyterhub.auth import LocalAuthenticator
+#     c.JupyterHub.authenticator_class = LocalAuthenticator
 
 c.JupyterHub.spawner_class = "docker"
 
@@ -28,7 +30,6 @@ c.Spawner.args = ['--NotebookApp.default_url=/lab']
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
 # We follow the same convention.
-import os
 # notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 notebook_dir = '/home/jovyan/work'
 c.DockerSpawner.notebook_dir = notebook_dir
