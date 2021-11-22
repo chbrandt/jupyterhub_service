@@ -1,10 +1,13 @@
 # jupyterhub_service
 
-JupyterHub spawning
+JupyterHub spawner. A Jupyter lab/notebooks launcher after authenticating users.
+A JupyterHub can spawn Notebooks as the server sections, or in docker containers.
+We will set the containers system.
+
 
 ## Install
 
-Let's install JupyterHub with conda:
+To install JupyterHub with conda:
 
 ```bash
 $ conda create -n jupyterhub -c conda-forge -y jupyterhub
@@ -14,6 +17,7 @@ $ pip install oauthenticator
 $ pip install dockerspawner
 ```
 
+After that, we want to config the system.
 
 ## References
 

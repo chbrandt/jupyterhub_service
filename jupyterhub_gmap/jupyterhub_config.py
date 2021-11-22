@@ -5,17 +5,22 @@ from jupyter_client.localinterfaces import public_ips
 c.JupyterHub.hub_ip = public_ips()[0]
 
 # Authenticator
-from oauthenticator.gitlab import GitLabOAuthenticator
-c.JupyterHub.authenticator_class = GitLabOAuthenticator
+if os.environ['GITLAB_HOST']:
+    from oauthenticator.gitlab import GitLabOAuthenticator
+    c.JupyterHub.authenticator_class = GitLabOAuthenticator
+else:
+    from jupyterhub.auth import LocalAuthenticator
+    c.JupyterHub.authenticator_class = LocalAuthenticator
 
 c.JupyterHub.spawner_class = "docker"
 
 # pick a default image to use when none is specified
-c.DockerSpawner.image = "gmap/isis:jupyter"
+c.DockerSpawner.image = "jupyter:isis"
 
 # delete containers when they stop
 c.DockerSpawner.remove = True
 
+# Use Lab as the default interface
 # c.SingleUserNotebookApp.default_url = "/lab"
 c.Spawner.args = ['--NotebookApp.default_url=/lab']
 
@@ -33,8 +38,10 @@ c.DockerSpawner.notebook_dir = notebook_dir
 # c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': notebook_dir }
 
 ISISDATA = os.environ['ISISDATA']
-c.DockerSpawner.volumes = { ISISDATA : '/opt/conda/envs/isis/data' }
+# c.DockerSpawner.volumes = { ISISDATA : '/opt/conda/envs/isis/data' }
+c.DockerSpawner.volumes = { ISISDATA : '/isis/data' }
 
+# Memory limit
 # c.Spawner.mem_limit = '3G'
 
 
