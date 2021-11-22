@@ -1,5 +1,3 @@
-#!/bin/bash
-
 ISISDATA="$DATA/isis3data/"
 export ISISDATA
 
