@@ -1,3 +1,5 @@
+import os
+
 c = get_config()  # noqa
 
 # The docker instances need access to the Hub, so the default loopback port doesn't work:
@@ -5,8 +7,9 @@ from jupyter_client.localinterfaces import public_ips
 c.JupyterHub.hub_ip = public_ips()[0]
 
 # Authenticator
-from oauthenticator.gitlab import GitLabOAuthenticator
-c.JupyterHub.authenticator_class = GitLabOAuthenticator
+if 'GITLAB_HOST' in os.environ:
+    from oauthenticator.gitlab import GitLabOAuthenticator
+    c.JupyterHub.authenticator_class = GitLabOAuthenticator
 
 from dockerspawner import DockerSpawner
 class CustomDockerSpawner(DockerSpawner):
@@ -24,8 +27,8 @@ class CustomDockerSpawner(DockerSpawner):
             self.log.info(f"Loading image {image}")
             self.image = image
 
-# c.JupyterHub.spawner_class = CustomDockerSpawner
-c.JupyterHub.spawner_class = "docker"
+c.JupyterHub.spawner_class = CustomDockerSpawner
+# c.JupyterHub.spawner_class = "docker"
 
 options_form_tpl = """
 <label for="image">
@@ -40,7 +43,7 @@ options_form_tpl = """
 def get_options_form(spawner):
     return options_form_tpl.format(default_image=spawner.image)
 
-# c.DockerSpawner.options_form = get_options_form
+c.DockerSpawner.options_form = get_options_form
 
 # pick a default image to use when none is specified
 c.DockerSpawner.image = "jupyter/base-notebook"
@@ -49,7 +52,7 @@ c.DockerSpawner.image = "jupyter/base-notebook"
 c.DockerSpawner.remove = True
 
 # c.SingleUserNotebookApp.default_url = "/lab"
-# c.Spawner.args = ['--NotebookApp.default_url=/lab']
+c.Spawner.args = ['--NotebookApp.default_url=/lab']
 
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
@@ -86,7 +89,7 @@ c.DockerSpawner.environment = {
     "CHOWN_EXTRA": "/home/jovyan",
     "CHOWN_HOME_OPTS": "-R",
     "NB_UID": 1000,
-    "NB_GID": 1000,
+    "NB_GID": 100,
 }
 
 c.DockerSpawner.volumes = {
